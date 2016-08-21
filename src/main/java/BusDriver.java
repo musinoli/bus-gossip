@@ -32,7 +32,7 @@ public class BusDriver {
         return heardAllGossip;
     }
 
-    public void setHeardAllGossip(boolean heardAllGossip) {
-        this.heardAllGossip = heardAllGossip;
+    public void isUpToDateWithGossip() {
+        heardAllGossip = true;
     }
 }

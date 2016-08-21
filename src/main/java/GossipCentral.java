@@ -5,35 +5,47 @@ import java.util.stream.Collectors;
  * https://dzone.com/articles/java-code-challenge-bus-gossip
  */
 public final class GossipCentral {
-    private static int remainingMins = 48; // TODO: set to 480;
+    private static final int MAX_NUM_OF_STOPS = 480;
+
+    public static final String DRIVERS_MISSING_GOSSIP_OUTPUT = "never";
 
     private GossipCentral() {}
 
-    public static void gossip(List<Route> routes) {
+    public static String driveUntilAllGossipExchanged(List<Route> routes) {
 
         List<BusDriver> drivers = getDrivers(routes);
+        int allGossip = drivers.size();
 
-        while (remainingMins-- > 0) {
+        for (int stopCounter = 1; stopCounter <= MAX_NUM_OF_STOPS; stopCounter++ ) {
             drivers.forEach(BusDriver::drive);
 
             for (List<BusDriver> driversAtSameStop : groupedDriversAtSameStop(drivers)) {
-                int totalGossip = driversAtSameStop.stream()
-                        .mapToInt(BusDriver::getGossip).sum();
-
-                driversAtSameStop.forEach(driver -> driver.setGossip(totalGossip));
+                for (BusDriver driver : driversAtSameStop) {
+                    driver.setGossip(totalGossip(driversAtSameStop));
+                    if (driver.getGossip() >= allGossip) {
+                        driver.isUpToDateWithGossip();
+                    }
+                }
             }
 
-            drivers.forEach(driver -> System.err.printf("Driver %d numOfGossip: %d\n",
-                    drivers.indexOf(driver), driver.getGossip()));
-            System.err.println("################################");
+            if (drivers.stream().allMatch(BusDriver::hasHeardAllGossip)) {
+                return String.valueOf(stopCounter);
+            }
         }
+
+        return DRIVERS_MISSING_GOSSIP_OUTPUT;
+    }
+
+    private static int totalGossip(List<BusDriver> drivers) {
+        return drivers.stream().mapToInt(BusDriver::getGossip).sum();
     }
 
     private static List<List<BusDriver>> groupedDriversAtSameStop(List<BusDriver> drivers) {
         return drivers.stream()
                 .collect(Collectors.groupingBy(BusDriver::getCurrentStop))
                 .values().stream()
-                .filter(driversAtSameStop -> driversAtSameStop.size() > 1).collect(Collectors.toList());
+                .filter(driversAtSameStop -> driversAtSameStop.size() > 1)
+                .collect(Collectors.toList());
     }
 
     private static List<BusDriver> getDrivers(List<Route> routes) {
