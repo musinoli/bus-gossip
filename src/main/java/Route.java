@@ -1,9 +1,8 @@
-import java.util.ArrayList;
 import java.util.List;
 
 public class Route {
 
-    private List<Integer> stops = new ArrayList<>();
+    private List<Integer> stops;
 
     private int stopCounter;
 

@@ -25,7 +25,7 @@ public final class GossipCentral {
             for (List<BusDriver> driversAtSameStop : groupedDriversAtSameStop(drivers)) {
                 for (BusDriver driver : driversAtSameStop) {
                     driver.addGossip(allGossip(driversAtSameStop));
-                    if (driver.getGossip().size() == totalGossip) {
+                    if (!driver.hasHeardAllGossip() && driver.getGossip().size() == totalGossip) {
                         driver.isUpToDateWithGossip();
                     }
                 }
