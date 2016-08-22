@@ -29,13 +29,13 @@ public class GossipCentralTest {
 
     @Test
     public void challenge1() throws IOException {
-        Assert.assertEquals("5", GossipCentral.driveUntilAllGossipExchanged(
+        Assert.assertEquals("9", GossipCentral.driveUntilAllGossipExchanged(
                 getRoutesFromFile("src/test/resources/input1")));
     }
 
     @Test
     public void challenge2() throws IOException {
-        Assert.assertEquals("11", GossipCentral.driveUntilAllGossipExchanged(
+        Assert.assertEquals("16", GossipCentral.driveUntilAllGossipExchanged(
                 getRoutesFromFile("src/test/resources/input2")));
     }
 
