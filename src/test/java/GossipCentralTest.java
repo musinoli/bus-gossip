@@ -44,7 +44,6 @@ public class GossipCentralTest {
 
         Files.lines(Paths.get(filePath))
                 .map(line -> Arrays.asList(line.split(" ")))
-                .collect(Collectors.toList())
                 .forEach(strList -> routes.add(new Route(convertToIntList(strList))));
 
         return routes;
